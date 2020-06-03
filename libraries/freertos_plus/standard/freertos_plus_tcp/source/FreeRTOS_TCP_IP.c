@@ -234,11 +234,13 @@ static void prvCheckOptions( FreeRTOS_Socket_t *pxSocket, NetworkBufferDescripto
  */
 static BaseType_t prvSingleStepTCPHeaderOptions( const unsigned char ** const ppucPtr, const unsigned char ** const ppucLast, FreeRTOS_Socket_t ** const ppxSocket, TCPWindow_t ** const ppxTCPWindow);
 
+#if( ipconfigUSE_TCP_WIN == 1 )
 /*
  * Skip past TCP header options when doing Selective ACK, until there are no
  * more options left.
  */
 static void prvSkipPastRemainingOptions( const unsigned char ** const ppucPtr, FreeRTOS_Socket_t ** const ppxSocket, unsigned char * const ppucLen );
+#endif
 
 /*
  * Set the initial properties in the options fields, like the preferred
@@ -1319,6 +1321,7 @@ static BaseType_t prvSingleStepTCPHeaderOptions( const unsigned char ** const pp
 
 /*-----------------------------------------------------------*/
 
+#if( ipconfigUSE_TCP_WIN == 1 )
 static void prvSkipPastRemainingOptions( const unsigned char ** const ppucPtr, FreeRTOS_Socket_t ** const ppxSocket, unsigned char * const pucLen )
 {
 uint32_t ulFirst = ulChar2u32( ( *ppucPtr ) );
@@ -1359,6 +1362,7 @@ uint32_t ulCount = ulTCPWindowTxSack( &( *ppxSocket )->u.xTCP.xTCPWindow, ulFirs
 	( *ppucPtr ) += 8;
 	( *pucLen ) -= 8;
 }
+#endif
 
 /*-----------------------------------------------------------*/
 
